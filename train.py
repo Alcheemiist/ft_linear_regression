@@ -1,4 +1,3 @@
-import os
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
@@ -8,7 +7,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 import pickle
-from sklearn.metrics import r2_score
 
 def read_data_source(input_file_path):
     # Read in the data
@@ -75,11 +73,11 @@ def backward(params, x, lr, grad):
     return params
 
 def train_model(train_x, train_y, valid_x, valid_y):
-    learning_r = 1e-5
-    epochs = 300000
+    learning_r = 1e-4
+    epochs = 1600
     params = init_params(train_x.shape[1])
 
-    sample_rate = 100
+    sample_rate = 50
     samples = int(epochs / sample_rate)
 
     historical_ws = np.zeros((samples, train_x.shape[1]))
@@ -110,20 +108,20 @@ def train_model(train_x, train_y, valid_x, valid_y):
             print(f"Epoch {i} validation loss: {h_valid_loss[i]}")
 
     # Create two subplots
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+    # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
     # Plot the first graph on the first subplot
-    ax1.scatter(historical_index, historical_ws)
-    ax1.scatter(historical_index, historical_gradient)
-    ax1.set_title("Historical Weights vs Gradient")
-    # scatter the second graph on the second subscatter
-    ax2.scatter(h_index, h_valid_loss)
-    ax2.set_title("Validation Loss vs Epoch")
+    # ax1.scatter(historical_index, historical_ws)
+    # ax1.scatter(historical_index, historical_gradient)
+    # ax1.set_title("Historical Weights vs Gradient")
+    # # scatter the second graph on the second subscatter
+    # ax2.scatter(h_index, h_valid_loss)
+    # ax2.set_title("Validation Loss vs Epoch")
 
-    fig.savefig("./analysis/data_analysis_train_model.png")
+    # fig.savefig("./analysis/data_analysis_train_model.png")
 
     theta1 = params[0]
     theta0 = params[1]
-    print(f" Params : {float(theta0)}, {float(theta1)}")
+    print(f"\nParams : {float(theta0)}, {float(theta1)}")
 
     # Save the model parameters
     with open('./model_params.pkl', 'wb') as f:
@@ -145,53 +143,19 @@ def review_lr(ax2, data, lr):
     ax2.set_title("Sklearn Linear Regression")
 
 if __name__ == '__main__':
-    theta0 = 0
-    theta1 = 0
-
-    if False:
-        # Load theta0 and theta1 from a file
-        pass
-
-    # print("Given a Milegae of a car, i'll predict the price of the car!!")
-    # mileage = float(input("Enter the mileage km of the car: "))
-    
     data = read_data_source("./data.csv")
-    # 1. Check for Missing Values
     missing_values = data.isnull().sum()
-    # 2. Feature Scaling
+
+    # Feature Scaling
     scaler = StandardScaler()
     data_scaled = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
-
-    # 3. Data Splitting
-    X = data_scaled[['km']]  # Feature matrix
-    y = data_scaled['price']  # Target vector
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     lr = SK_linear_regression(data)
 
     PREDICTORS = ["km"]
     TARGET = "price"
-    # Ensure we get the same split every time
     np.random.seed(0)
     split_data_scaled = np.split(data_scaled, [int(.7 * len(data_scaled)), int(.85 * len(data_scaled))])
     (train_x, train_y), (valid_x, valid_y), (test_x, test_y) = [[d[PREDICTORS].to_numpy(), d[[TARGET]].to_numpy()] for d in split_data_scaled]
 
     params = train_model(train_x, train_y, valid_x, valid_y)
-
-    # Create two subplots
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-    review_gd(ax1, train_x, train_y, params)
-    review_lr(ax2, data, lr)
-    fig.savefig("./analysis/data_analysis_review.png")
-
-    predictions = forward(params, X_test)
-    Error_value = np.mean(np.abs(y_test - predictions))
-    print(f"Error = {Error_value} / Error(%) = {Error_value * 100} %")
-
-    y_pred = forward(params, X_test)
-    r2 = r2_score(y_test, y_pred)
-
-    print(f"Accuracy = {r2} / Accuracy(%) = {r2 * 100} %")
-    exit()
-    esimated_price = get_estimated_price(mileage, theta0, theta1)
-    print(f"The estimated price of the car is: {esimated_price} km of mileage: {mileage}")

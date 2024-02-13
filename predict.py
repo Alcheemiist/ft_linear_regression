@@ -14,8 +14,8 @@ if __name__ == '__main__':
         with open('model_params.pkl', 'rb') as f:
             loaded_params = pickle.load(f)
 
-        theta1 = loaded_params[1]
         theta0 = loaded_params[0]
+        theta1 = loaded_params[1]
         print(f"Loaded Params : {float(theta0)}, {float(theta1)}")
         pass
 
