@@ -1,6 +1,5 @@
 from sklearn.metrics import r2_score
 
-
 # Assuming test_x and test_y are your test data and labels
 test_predictions = forward(params, test_x)
 

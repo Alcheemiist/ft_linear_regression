@@ -5,18 +5,18 @@ def predict_price(mileage, theta0, theta1):
     return theta0 + (theta1 * mileage)
 
 if __name__ == '__main__':
+    model_file = 'model_params.pkl'
     theta0 = 0
     theta1 = 0
 
-    if os.path.exists('model_params.pkl'):
-        # Load theta0 and theta1 from a file
-        # Load the model parameters
-        with open('model_params.pkl', 'rb') as f:
+    if os.path.exists(model_file):
+        with open(model_file, 'rb') as f:
             loaded_params = pickle.load(f)
 
-        theta0 = loaded_params[0]
-        theta1 = loaded_params[1]
-        print(f"Loaded Params : {float(theta0)}, {float(theta1)}")
+        theta0 = float(loaded_params[0][0])
+        theta1 = float(loaded_params[1][0])
+
+        print(f"Loaded Params : {(theta0)}, {(theta1)}\n")
         pass
 
     print("Given a Milegae of a car, i'll predict the price of the car!!")

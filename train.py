@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LinearRegression
-import matplotlib.pyplot as plt
 import numpy as np
 import math
 import pickle
@@ -142,7 +141,7 @@ def review_lr(ax2, data, lr):
     ax2.plot(data["km"], lr.predict(data[["km"]]), "r+-", color="green")
     ax2.set_title("Sklearn Linear Regression")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     data = read_data_source("./data.csv")
     missing_values = data.isnull().sum()
 
@@ -159,3 +158,4 @@ if __name__ == '__main__':
     (train_x, train_y), (valid_x, valid_y), (test_x, test_y) = [[d[PREDICTORS].to_numpy(), d[[TARGET]].to_numpy()] for d in split_data_scaled]
 
     params = train_model(train_x, train_y, valid_x, valid_y)
+
