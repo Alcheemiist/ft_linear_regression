@@ -22,4 +22,4 @@ if __name__ == '__main__':
     print("Given a Milegae of a car, i'll predict the price of the car!!")
     mileage = float(input("Enter the mileage km of the car: "))
     esimated_price = predict_price(mileage, theta0, theta1)
-    print(f"The estimated price of the car is: {esimated_price} km of mileage: {mileage}")
+    print(f"The Estimated price : {esimated_price} $ \n Car mileage: {mileage} km")
