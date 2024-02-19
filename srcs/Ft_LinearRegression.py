@@ -1,9 +1,10 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class Ft_LinearRegression:
 
-    def __init__(self, data, lr, epochs):
+    def __init__(self, data, lr, epochs, sr):
         self.data = data
         self.theta0 = 0.0
         self.theta1 = 0.0
@@ -15,7 +16,11 @@ class Ft_LinearRegression:
 
         self.learning_r = lr
         self.epochs = epochs
+        self.sample_rate = sr
 
+        self.h_valid_loss = np.zeros((self.epochs)) 
+        self.h_index = np.zeros((self.epochs))
+ 
     def init_params(self, predictors):
         np.random.seed(0)
         self.weights = np.random.rand(predictors, 1)
@@ -47,15 +52,13 @@ class Ft_LinearRegression:
     def train_model(self, train_x, train_y, valid_x, valid_y):
 
         self.params = self.init_params(train_x.shape[1])
-
-        sample_rate = 50
-        samples = int(self.epochs / sample_rate)
+        samples = int(self.epochs / self.sample_rate)
 
         historical_ws = np.zeros((samples, train_x.shape[1]))
         historical_gradient = np.zeros((samples,))
         historical_index = np.zeros((samples,))
-        h_valid_loss = np.zeros((self.epochs,))
-        h_index = np.zeros((self.epochs,))
+        self.h_valid_loss = np.zeros((self.epochs,))
+        self.h_index = np.zeros((self.epochs,))
 
         y = 0
         for i in range(self.epochs):
@@ -63,34 +66,52 @@ class Ft_LinearRegression:
             grad = self.mse_grad(train_y, predictions)
             self.params = self.backward(self.params, train_x, self.learning_r, grad)
 
-            if i % sample_rate == 0:
+            if i % self.sample_rate == 0:
                 # Store historical weights for visualization
-
-                index = int(i / sample_rate)
+                index = int(i / self.sample_rate)
                 historical_index[y] = index
                 historical_gradient[index] = np.mean(grad)
                 historical_ws[index,:] = self.params[0][:,0]
 
                 # Display validation loss
                 predictions = self.forward(self.params, valid_x)
-                h_valid_loss[i] = self.mse(valid_y, predictions)
-                h_index[i] = i
-                print(f"Epoch {i} validation loss: {h_valid_loss[i]}")
+                self.h_valid_loss[i] = self.mse(valid_y, predictions)
+                self.h_index[y] = i
+                print(f"Epoch {i} validation loss: {self.h_valid_loss[i]}")
+                y += 1
 
         return self.params
 
+    def metrics(self, params, train_x, train_y):
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+        predictions = self.forward(params, train_x)
 
-    # Create two subplots
-    # fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
-    # Plot the first graph on the first subplot
-    # ax1.scatter(historical_index, historical_ws)
-    # ax1.scatter(historical_index, historical_gradient)
-    # ax1.set_title("Historical Weights vs Gradient")
-    # # scatter the second graph on the second subscatter
-    # ax2.scatter(h_index, h_valid_loss)
-    # ax2.set_title("Validation Loss vs Epoch")
+        ax1.set_title("True Data ")
+        ax1.scatter(train_x, train_y)
+        ax1.set_xlabel("X")
+        ax1.set_ylabel("Y")
 
-    # fig.savefig("./analysis/data_analysis_train_model.png")
+        ax2.set_title("Prediction Data ")
+        ax2.scatter(train_x, predictions)
+        ax2.plot(train_x, predictions, "y+-")
+        ax1.set_xlabel("X")
+        ax1.set_ylabel("Y")
+
+        fig.savefig("./analysis/data_analysis_train.png")
+        # scatter the second graph on the second subscatter
+        ax3 = plt.figure().add_subplot(111)
+
+        # print(list(self.h_index))
+        print(list(self.h_valid_loss))
+
+        ax3.plot(self.h_index, self.h_valid_loss, "r+-")
+        ax3.set_title("Validation Loss")
+        ax3.set_xlabel("Epoch")
+        ax3.set_ylabel("Loss")
+        ax3.grid()
+
+        plt.show()
+
 
 def review(self, ax1, train_x, train_y, params):
     # Plot the first graph on the first subplot
