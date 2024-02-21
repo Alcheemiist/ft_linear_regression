@@ -57,8 +57,8 @@ class Ft_LinearRegression:
         historical_ws = np.zeros((samples, train_x.shape[1]))
         historical_gradient = np.zeros((samples,))
         historical_index = np.zeros((samples,))
-        self.h_valid_loss = np.zeros((self.epochs,))
-        self.h_index = np.zeros((self.epochs,))
+        self.h_valid_loss = np.zeros((samples ,))
+        self.h_index = np.zeros((samples ,))
 
         y = 0
         for i in range(self.epochs):
@@ -70,14 +70,14 @@ class Ft_LinearRegression:
                 # Store historical weights for visualization
                 index = int(i / self.sample_rate)
                 historical_index[y] = index
-                historical_gradient[index] = np.mean(grad)
-                historical_ws[index,:] = self.params[0][:,0]
+                historical_gradient[y] = np.mean(grad)
+                historical_ws[y,:] = self.params[0][:,0]
 
                 # Display validation loss
                 predictions = self.forward(self.params, valid_x)
-                self.h_valid_loss[i] = self.mse(valid_y, predictions)
+                self.h_valid_loss[y] = self.mse(valid_y, predictions)
                 self.h_index[y] = i
-                print(f"Epoch {i} validation loss: {self.h_valid_loss[i]}")
+                print(f"Epoch {i} validation loss: {self.h_valid_loss[y]}")
                 y += 1
 
         return self.params

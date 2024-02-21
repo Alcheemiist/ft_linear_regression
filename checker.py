@@ -5,12 +5,12 @@ import pickle
 def predict_price(mileage, theta0, theta1):
     return theta0 + (theta1 * mileage)
 
-def check_data(estimated_price, actual_price):
+def check_data(mileage, estimated_price, actual_price):
     deff = abs(estimated_price - actual_price)
-    if deff < 1000:
-        print(f"Estimated Price : {estimated_price} | Actual Price : {actual_price} | Difference : {deff} | Success")
+    if deff <= 1000:
+        print(f"({mileage}) Estimated Price : {estimated_price} | Actual Price : {actual_price} | Difference : {deff} | Success")
     else:
-        print(f"Estimated Price : {estimated_price} | Actual Price : {actual_price} | Difference : {deff} | Failure")
+        print(f"({mileage}) Estimated Price : {estimated_price} | Actual Price : {actual_price} | Difference : {deff} | Failure")
     return deff < 1000
 
 if __name__ == "__main__":
@@ -33,6 +33,6 @@ if __name__ == "__main__":
 
     for i, row in data.iterrows():
         estimated_price = predict_price(row[0], theta0, theta1)
-        sum_succes = sum_succes + check_data(estimated_price, row[1])
+        sum_succes = sum_succes + check_data(row[0], estimated_price, row[1])
     
     print(f"Success {sum_succes} ove {len(data)} , Success rate : {sum_succes / len(data)}")
