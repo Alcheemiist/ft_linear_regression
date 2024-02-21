@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
 
 
 class Ft_LinearRegression:
@@ -82,9 +83,13 @@ class Ft_LinearRegression:
 
         return self.params
 
-    def metrics(self, params, train_x, train_y):
+    def metrics(self, scaler, params, train_x, train_y):
+
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
         predictions = self.forward(params, train_x)
+        y_pred = predictions
+        # y_pred = scaler.inverse_transform(predictions.reshape(-1, 1))
 
         ax1.set_title("True Data ")
         ax1.scatter(train_x, train_y)
@@ -92,8 +97,8 @@ class Ft_LinearRegression:
         ax1.set_ylabel("Y")
 
         ax2.set_title("Prediction Data ")
-        ax2.scatter(train_x, predictions)
-        ax2.plot(train_x, predictions, "y+-")
+        ax2.scatter(train_x, y_pred)
+        ax2.plot(train_x, y_pred, "y+-")
         ax1.set_xlabel("X")
         ax1.set_ylabel("Y")
 

@@ -1,8 +1,13 @@
 import os
 import pickle
+from sklearn.preprocessing import StandardScaler
+
 
 def predict_price(mileage, theta0, theta1):
-    return theta0 + (theta1 * mileage)
+    scaler = StandardScaler()
+    y_pred_scaled =  theta0 + (theta1 * mileage)
+    y_pred = scaler.inverse_transform(y_pred_scaled.reshape(-1, 1))
+    return y_pred
 
 if __name__ == '__main__':
     model_file = 'model_params.pkl'

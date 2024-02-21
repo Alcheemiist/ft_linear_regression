@@ -9,6 +9,14 @@ def save_params(params, path):
     with open(path, 'wb') as f:
             pickle.dump(params, f)
 
-def scale_data(data):
-    scaler = StandardScaler()  
-    return pd.DataFrame(scaler.fit_transform(data), columns=data.columns)   
+def scale_data(data, scaler):
+    mean = data.mean()
+    std = data.std()
+
+    data = (data - mean) / std
+    data = pd.DataFrame(data)
+
+    variable = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
+    # print(data.head(5))
+    # print(variable.head(5))
+    return  variable
