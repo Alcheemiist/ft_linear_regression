@@ -7,6 +7,7 @@ def read_data_source(input_file_path):
     df = pd.DataFrame(data.describe())
     df.to_csv("./analysis/data_analysis_describe.csv")
     dt = data.plot.scatter("km", "price")
+    dt.set_title("Data")
     dt.get_figure().savefig("./analysis/data_analysis_scatter.png")
     return data
     
