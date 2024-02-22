@@ -10,6 +10,10 @@ if __name__ == '__main__':
     model_file = 'model_params.pkl'
     theta0 = 0
     theta1 = 0
+    km_mean = 0
+    price_mean = 0
+    km_std = 1
+    price_std = 1
 
     if os.path.exists(model_file):
         with open(model_file, 'rb') as f:
@@ -45,4 +49,4 @@ if __name__ == '__main__':
     esimated_price = (esimated_price * price_std) + price_mean
     esimated_price = round(float(esimated_price), 2)
 
-    print(f"The Estimated price : {esimated_price}\n")
+    print(f"The Estimated price is : {esimated_price}\n")

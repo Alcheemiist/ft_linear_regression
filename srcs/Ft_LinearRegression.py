@@ -40,6 +40,7 @@ class Ft_LinearRegression:
     def backward(self, params, x, lr, grad):
         w_grad = (x.T / x.shape[0]) @ grad
         b_grad = np.mean(grad, axis=0)
+        
         self.params[0] -= w_grad * lr
         self.params[1] -= b_grad * lr
         return params
