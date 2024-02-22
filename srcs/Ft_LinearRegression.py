@@ -81,21 +81,13 @@ class Ft_LinearRegression:
         ax1.set_ylabel("Price")
         ax1.grid()
         ax1.legend(["Actual", "Predictions"])
-
         fig.savefig("./analysis/data_analysis_train.png")
-
-        ax3 = plt.figure().add_subplot(111)
+        fig3, ax3 = plt.figure().add_subplot(111)
         # print(list(self.h_valid_loss))
         ax3.plot(self.h_index, self.h_valid_loss, "r+-")
         ax3.set_title("Validation Loss")
         ax3.set_xlabel("Epoch")
         ax3.set_ylabel("Loss")
         ax3.grid()
+        fig3.savefig("./analysis/data_analysis_validation_loss.png")
         plt.show()
-
-def review(self, ax1, train_x, train_y, params):
-    predictions = self.forward(params, train_x)
-    ax1.scatter(train_x, predictions)
-    ax1.plot(train_x, predictions, "y+-")
-    ax1.scatter(train_x, train_y)
-    ax1.set_title("Gradient Descent Linear Regression")
