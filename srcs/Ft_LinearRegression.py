@@ -1,7 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
-
 
 class Ft_LinearRegression:
 
@@ -38,11 +36,11 @@ class Ft_LinearRegression:
         return predicted - actual
 
     def backward(self, params, x, lr, grad):
-        w_grad = (x.T / x.shape[0]) @ grad
-        b_grad = np.mean(grad, axis=0)
+        tmp1 = (x.T / x.shape[0]) @ grad
+        tmp0 = np.mean(grad, axis=0)
         
-        self.params[0] -= w_grad * lr
-        self.params[1] -= b_grad * lr
+        self.params[0] -= tmp1 * lr
+        self.params[1] -= tmp0 * lr
         return params
 
     def train_model(self, train_x, train_y, valid_x, valid_y):
@@ -72,21 +70,22 @@ class Ft_LinearRegression:
         return self.params
 
     def metrics(self, params, train_x, train_y):
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+        fig, ax1 = plt.subplots()
         predictions = self.forward(params, train_x)
         y_pred = predictions
-        ax1.set_title("Scaled Data")
+        ax1.set_title("Gradient Descent Linear Regression")
         ax1.scatter(train_x, train_y)
-        ax1.set_xlabel("X")
-        ax1.set_ylabel("Y")
-        ax2.set_title("Prediction Data")
-        ax2.scatter(train_x, y_pred)
-        ax2.plot(train_x, y_pred, "y+-")
-        ax1.set_xlabel("X")
-        ax1.set_ylabel("Y")
+        ax1.scatter(train_x, y_pred)
+        ax1.plot(train_x, y_pred, "y+-")
+        ax1.set_xlabel("Km")
+        ax1.set_ylabel("Price")
+        ax1.grid()
+        ax1.legend(["Actual", "Predictions"])
+
         fig.savefig("./analysis/data_analysis_train.png")
+
         ax3 = plt.figure().add_subplot(111)
-        print(list(self.h_valid_loss))
+        # print(list(self.h_valid_loss))
         ax3.plot(self.h_index, self.h_valid_loss, "r+-")
         ax3.set_title("Validation Loss")
         ax3.set_xlabel("Epoch")
